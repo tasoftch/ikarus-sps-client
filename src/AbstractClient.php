@@ -92,7 +92,7 @@ abstract class AbstractClient implements ClientInterface
     /**
      * @inheritDoc
      */
-    public function sendCommand(CommandInterface $command): int
+    public function sendCommand($command): int
     {
         $socket = $this->establishConnection();
         if(!is_resource($socket)) {
@@ -113,7 +113,7 @@ abstract class AbstractClient implements ClientInterface
         try {
             error_clear_last();
 
-            fwrite($socket, $this->serializeCommand($command));
+            fwrite($socket, $command instanceof CommandInterface ? $this->serializeCommand($command) : (string) $command);
 
             $e();
 
