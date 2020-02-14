@@ -21,63 +21,16 @@
  * SOFTWARE.
  */
 
-namespace Ikarus\SPS\Client\Command;
+namespace Ikarus\SPS\Client\Exception;
 
 
-use Ikarus\SPS\Client\ClientInterface;
+use RuntimeException;
+use Throwable;
 
-class Command implements CommandInterface
+class ClientException extends RuntimeException
 {
-    /** @var string */
-    private $name;
-    /** @var string[] */
-    private $arguments;
-    /** @var string|null */
-    private $response;
-
-    /**
-     * Command constructor.
-     * @param string $name
-     * @param string[] $arguments
-     */
-    public function __construct(string $name, array $arguments = [])
+    public function __construct($message = "", $code = 0, Throwable $previous = NULL, ...$args)
     {
-        $this->name = $name;
-        $this->arguments = $arguments;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getArguments(): array
-    {
-        return $this->arguments;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getResponse(): ?string
-    {
-        return $this->response;
-    }
-
-    /**
-     * @param string|null $response
-     * @return int
-     */
-    public function setResponse(string $response = NULL): int
-    {
-        $this->response = $response;
-        return $response != -1 ? ClientInterface::STATUS_OK : ClientInterface::STATUS_ERR;
+        parent::__construct(vsprintf($message, $args), $code, $previous);
     }
 }

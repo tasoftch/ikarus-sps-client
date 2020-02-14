@@ -44,7 +44,7 @@ interface CommandInterface
      * Sets the response received from the sps
      *
      * @param string|NULL $response
-     * @return void
+     * @return int
      */
-    public function setResponse(string $response = NULL);
+    public function setResponse(string $response = NULL): int;
 }

@@ -21,63 +21,46 @@
  * SOFTWARE.
  */
 
-namespace Ikarus\SPS\Client\Command;
+namespace Ikarus\SPS\Client;
 
 
-use Ikarus\SPS\Client\ClientInterface;
+use Ikarus\SPS\Client\Exception\SocketException;
 
-class Command implements CommandInterface
+class TcpClient extends UnixClient
 {
-    /** @var string */
-    private $name;
-    /** @var string[] */
-    private $arguments;
-    /** @var string|null */
-    private $response;
+    /** @var int */
+    private $port;
 
     /**
-     * Command constructor.
-     * @param string $name
-     * @param string[] $arguments
+     * TcpClient constructor.
+     * @param string $ipAddress
+     * @param int $tcpPort
+     * @param float $timeout
      */
-    public function __construct(string $name, array $arguments = [])
+    public function __construct(string $ipAddress, int $tcpPort, float $timeout = 1.0)
     {
-        $this->name = $name;
-        $this->arguments = $arguments;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
+        parent::__construct($ipAddress, $timeout);
+        $this->port = $tcpPort;
     }
 
     /**
-     * @return string[]
-     */
-    public function getArguments(): array
-    {
-        return $this->arguments;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getResponse(): ?string
-    {
-        return $this->response;
-    }
-
-    /**
-     * @param string|null $response
      * @return int
      */
-    public function setResponse(string $response = NULL): int
+    public function getPort(): int
     {
-        $this->response = $response;
-        return $response != -1 ? ClientInterface::STATUS_OK : ClientInterface::STATUS_ERR;
+        return $this->port;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function establishConnection()
+    {
+        $socket = fsockopen($this->getAddress(), $this->getPort(), $errorno, $errstr, $this->getTimeout());
+        if(!$socket) {
+            $e = new SocketException($errstr, $errorno);
+            throw $e;
+        }
+        return $socket;
     }
 }

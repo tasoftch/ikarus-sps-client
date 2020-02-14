@@ -21,63 +21,53 @@
  * SOFTWARE.
  */
 
-namespace Ikarus\SPS\Client\Command;
+namespace Ikarus\SPS\Client;
 
 
-use Ikarus\SPS\Client\ClientInterface;
+use Ikarus\SPS\Client\Exception\SocketException;
 
-class Command implements CommandInterface
+class UnixClient extends AbstractClient
 {
     /** @var string */
-    private $name;
-    /** @var string[] */
-    private $arguments;
-    /** @var string|null */
-    private $response;
+    private $address;
 
     /**
-     * Command constructor.
-     * @param string $name
-     * @param string[] $arguments
+     * UnixClient constructor.
+     * @param string $address
+     * @param float $timeout
      */
-    public function __construct(string $name, array $arguments = [])
+    public function __construct(string $address, float $timeout = 1.0)
     {
-        $this->name = $name;
-        $this->arguments = $arguments;
+        parent::__construct($timeout);
+        $this->address = $address;
     }
-
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getAddress(): string
     {
-        return $this->name;
+        return $this->address;
     }
 
     /**
-     * @return string[]
+     * @inheritDoc
      */
-    public function getArguments(): array
+    protected function establishConnection()
     {
-        return $this->arguments;
+        $socket = fsockopen($this->getAddress(), NULL, $errorno, $errstr, $this->getTimeout());
+        if(!$socket) {
+            $e = new SocketException($errstr, $errorno);
+            throw $e;
+        }
+        return $socket;
     }
 
     /**
-     * @return string|null
+     * @inheritDoc
      */
-    public function getResponse(): ?string
+    protected function closeConnection($socket)
     {
-        return $this->response;
-    }
-
-    /**
-     * @param string|null $response
-     * @return int
-     */
-    public function setResponse(string $response = NULL): int
-    {
-        $this->response = $response;
-        return $response != -1 ? ClientInterface::STATUS_OK : ClientInterface::STATUS_ERR;
+        fclose($socket);
     }
 }
