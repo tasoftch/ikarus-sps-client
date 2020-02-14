@@ -34,8 +34,8 @@ interface ClientInterface
     /**
      * Sends a command to a running sps
      *
-     * @param CommandInterface|string $command
+     * @param CommandInterface $command
      * @return int
      */
-    public function sendCommand($command): int;
+    public function sendCommand(CommandInterface $command): int;
 }

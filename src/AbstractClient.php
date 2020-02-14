@@ -24,6 +24,7 @@
 namespace Ikarus\SPS\Client;
 
 
+use Ikarus\SPS\Client\Command\Command;
 use Ikarus\SPS\Client\Command\CommandInterface;
 use Ikarus\SPS\Client\Exception\ClientException;
 use Ikarus\SPS\Client\Exception\CommunicationException;
@@ -90,9 +91,22 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
+     * Sends a command without arguments to the server
+     *
+     * @param $command
+     * @return string|null
+     */
+    public function sendCommandNamed($command): ?string {
+        $cmd = new Command($command);
+        if($this->sendCommand($cmd) != static::STATUS_OK)
+            return NULL;
+        return $cmd->getResponse();
+    }
+
+    /**
      * @inheritDoc
      */
-    public function sendCommand($command): int
+    public function sendCommand(CommandInterface $command): int
     {
         $socket = $this->establishConnection();
         if(!is_resource($socket)) {
