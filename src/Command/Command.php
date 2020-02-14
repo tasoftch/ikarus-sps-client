@@ -24,27 +24,7 @@
 namespace Ikarus\SPS\Client\Command;
 
 
-interface CommandInterface
+class Command
 {
-    /**
-     * Gets the command name
-     *
-     * @return string
-     */
-    public function getName(): string;
 
-    /**
-     * Gets any required information to execute the command on the sps
-     *
-     * @return string[]
-     */
-    public function getArguments(): array;
-
-    /**
-     * Sets the response received from the sps
-     *
-     * @param string|NULL $response
-     * @return void
-     */
-    public function setResponse(string $response = NULL);
 }
