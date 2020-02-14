@@ -1,0 +1,18 @@
+{
+  "name": "ikarus/sps-client",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Abplanalp",
+      "email": "info@tasoft.ch"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Ikarus\\SPS\\Client\\" : "src"
+    }
+  },
+  "require" : {
+    "php": "^7.2"
+  }
+}
