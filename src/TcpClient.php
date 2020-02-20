@@ -63,4 +63,18 @@ class TcpClient extends UnixClient
         }
         return $socket;
     }
+
+    /**
+     * Checks, if the host is reachable.
+     *
+     * @return bool
+     */
+    public function isReachable() {
+        $fh = @fsockopen($this->getAddress(), 80, $err, $errstr, 0.5);
+        if($fh) {
+            fclose($fh);
+            return true;
+        }
+        return false;
+    }
 }
