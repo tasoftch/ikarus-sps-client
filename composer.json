@@ -1,7 +1,6 @@
 {
   "name": "ikarus/sps-client",
   "license": "MIT",
-  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Thomas Abplanalp",
