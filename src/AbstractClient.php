@@ -83,14 +83,15 @@ abstract class AbstractClient implements ClientInterface
         return $cmd . " " . serialize($args);
     }
 
-    /**
-     * Sends a command without arguments to the server
-     *
-     * @param $command
-     * @return string|null
-     */
-    public function sendCommandNamed($command): ?string {
-        $cmd = new Command($command);
+	/**
+	 * Sends a command without arguments to the server
+	 *
+	 * @param $command
+	 * @param array $arguments
+	 * @return string|null
+	 */
+    public function sendCommandNamed($command, array $arguments = []): ?string {
+        $cmd = new Command($command, $arguments);
         if($this->sendCommand($cmd) != static::STATUS_OK)
             return NULL;
         return $cmd->getResponse();

@@ -24,60 +24,10 @@
 namespace Ikarus\SPS\Client\Command;
 
 
-use Ikarus\SPS\Client\ClientInterface;
-
-class Command implements CommandInterface
+class FetchValueCommand extends ParsedCommand
 {
-    /** @var string */
-    private $name;
-    /** @var string[] */
-    private $arguments;
-    /** @var string|null */
-    protected $response;
-
-    /**
-     * Command constructor.
-     * @param string $name
-     * @param string[] $arguments
-     */
-    public function __construct(string $name, array $arguments = [])
-    {
-        $this->name = $name;
-        $this->arguments = $arguments;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getArguments(): array
-    {
-        return $this->arguments;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getResponse(): ?string
-    {
-        return $this->response;
-    }
-
-    /**
-     * @param string|null $response
-     * @return int
-     */
-    public function setResponse(string $response = NULL): int
-    {
-        $this->response = $response;
-        return $response != 0 ? ClientInterface::STATUS_OK : ClientInterface::STATUS_ERR;
-    }
+	public function __construct(string $key, string $domain = NULL)
+	{
+		parent::__construct('getv', [$domain, $key]);
+	}
 }
