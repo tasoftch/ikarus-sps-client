@@ -79,15 +79,8 @@ abstract class AbstractClient implements ClientInterface
 
     protected function serializeCommand(CommandInterface $command): string {
         $cmd = $command->getName();
-        if($args = $command->getArguments()) {
-            $cmd .= " " . implode(" ", array_map(function($arg) {
-                    if(preg_match("/\"/i", $arg)) {
-                        return "\"" . str_replace('""', '\\"', $arg) . "\"";
-                    }
-                    return $arg;
-                }, $args));
-        }
-        return $cmd;
+		$args = $command->getArguments() ?: [];
+        return $cmd . " " . serialize($args);
     }
 
     /**
@@ -133,9 +126,15 @@ abstract class AbstractClient implements ClientInterface
 
             $buffer = "";
 
-            while (!feof($socket)) {
-                $buffer .= fread($socket, static::SOCK_BUFFER_SIZE);
-            }
+			while (!feof($socket)) {
+				$buf = fread($socket, static::SOCK_BUFFER_SIZE);
+				if($buf)
+					$buffer .= $buf;
+				else
+					break;
+				if(strlen($buf) < static::SOCK_BUFFER_SIZE)
+					break;
+			}
 
             $e();
 
