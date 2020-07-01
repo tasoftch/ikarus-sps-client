@@ -55,7 +55,7 @@ class UnixClient extends AbstractClient
      */
     protected function establishConnection()
     {
-        $socket = fsockopen($this->getAddress(), NULL, $errorno, $errstr, $this->getTimeout());
+        $socket = fsockopen("unix://" . $this->getAddress(), NULL, $errorno, $errstr, $this->getTimeout());
         if(!$socket) {
             $e = new SocketException($errstr, $errorno);
             throw $e;

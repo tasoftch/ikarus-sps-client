@@ -56,7 +56,7 @@ class TcpClient extends UnixClient
      */
     protected function establishConnection()
     {
-        $socket = fsockopen($this->getAddress(), $this->getPort(), $errorno, $errstr, $this->getTimeout());
+        $socket = fsockopen("tcp://" . $this->getAddress(), $this->getPort(), $errorno, $errstr, $this->getTimeout());
         if(!$socket) {
             $e = new SocketException($errstr, $errorno);
             throw $e;
