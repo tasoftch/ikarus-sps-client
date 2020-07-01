@@ -26,7 +26,7 @@ namespace Ikarus\SPS\Client\Command;
 
 class FetchValueCommand extends ParsedCommand
 {
-	public function __construct(string $key, string $domain = NULL)
+	public function __construct(string $domain, string $key = NULL)
 	{
 		parent::__construct('getv', [$domain, $key]);
 	}
